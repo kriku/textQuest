@@ -34,7 +34,17 @@ public class Player implements Serializable {
         inventory.add(object.getId());
     }
 
+    public void addObjects(Object[] objects) {
+        for (Object object : objects) {
+            this.addObject(object);
+        }
+    }
+
     public boolean hasItem(int objectId) {
         return inventory.contains(objectId);
+    }
+
+    public Set<Integer> getInventory() {
+        return inventory;
     }
 }

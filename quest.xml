@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- quest - root node, attribute name use for naming quest and save game with that name -->
 <quest name="some name of quest">
     <locations>
+        <!-- node location use for describe locations of quest -->
+        <!-- every location should have unique attribute id for navigate -->
+        <!-- attribute required use for define enter location requirements -->
         <location id="0">
+            <!-- use node description for main text of location -->
             <description>This is the start. Now you can choice some options.</description>
             <exits>
                 <!-- attribute location use for movement to location with this id-->
@@ -13,17 +18,27 @@
             </exits>
             <objects>
                 <object id="1">knife</object>
-                <object id="2">key</object>
                 <object id="3">suit</object>
             </objects>
+            <characters>
+                <character id="1" enemy="false">
+                    <description>little pony</description>
+                    <objects>
+                        <object id="2">key</object>
+                    </objects>
+                </character>
+            </characters>
         </location>
+
         <location id="1">
             <description>Location 1</description>
             <exits>
+                <exit location="0">go main stage</exit>
                 <exit location="2">go north</exit>
             </exits>
         </location>
-        <location id="2">
+
+        <location id="2" required="1">
             <description>Location 2</description>
             <exits>
                 <exit location="0">go north</exit>
@@ -32,6 +47,7 @@
     </locations>
     <characters>
         <character id="1">
+            <description>little pony</description>
             <objects>
                 object
             </objects>

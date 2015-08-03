@@ -41,10 +41,6 @@ public class Parser {
             Location[] locations = getLocations(locationsNode);
             game.setLocations(locations);
 
-//            Node objectsNode = doc.getElementsByTagName("objects").item(0);
-//            Object[] objects = getObjects(objectsNode);
-//            game.setObjects(objects);
-
             game.setObjects(getAllObjects(doc));
 
         } catch (Exception e) {
@@ -87,12 +83,25 @@ public class Parser {
             if (locationNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eLocation = (Element) locationNode;
                 int id = Integer.valueOf(eLocation.getAttribute("id"));
+
+                int required = -1;
+
+                if (eLocation.hasAttribute("required")) {
+                    required = Integer.valueOf(eLocation.getAttribute("required"));
+                }
+
                 String description = eLocation.getElementsByTagName("description").item(0).getTextContent();
 
                 Node exitsNode = eLocation.getElementsByTagName("exits").item(0);
                 Exit[] exits = getExits(exitsNode);
 
-                locations[i] = new Location(id, description, exits);
+                Node characterNode = eLocation.getElementsByTagName("characters").item(0);
+                Character[] characters = getCharacters(characterNode);
+
+                Node objectsNode = eLocation.getElementsByTagName("objects").item(0);
+                Object[] objects = getObjects(objectsNode);
+
+                locations[i] = new Location(id, required, description, exits, characters, objects);
             }
         }
         return locations;
@@ -100,20 +109,24 @@ public class Parser {
 
     private Object[] getObjects(Node objectsNode) {
         Element eObjects = (Element) objectsNode;
-        NodeList objectNodes = eObjects.getElementsByTagName("object");
-        int objectNodesLength = objectNodes.getLength();
-        Object[] objects = new Object[objectNodesLength];
+        Object[] objects = null;
 
-        for (int i = 0; i < objectNodesLength; i++) {
-            Node locationNode = objectNodes.item(i);
+        if (eObjects != null) {
+            NodeList objectNodes = eObjects.getElementsByTagName("object");
+            int objectNodesLength = objectNodes.getLength();
+            objects = new Object[objectNodesLength];
 
-            if (locationNode.getNodeType() == Node.ELEMENT_NODE) {
-                Element eObject = (Element) locationNode;
+            for (int i = 0; i < objectNodesLength; i++) {
+                Node locationNode = objectNodes.item(i);
 
-                int id = Integer.valueOf(eObject.getAttribute("id"));
-                String description = eObject.getTextContent();
+                if (locationNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eObject = (Element) locationNode;
 
-                objects[i] = new Object(id, description);
+                    int id = Integer.valueOf(eObject.getAttribute("id"));
+                    String description = eObject.getTextContent();
+
+                    objects[i] = new Object(id, description);
+                }
             }
         }
         return objects;
@@ -137,5 +150,33 @@ public class Parser {
             }
         }
         return objects;
+    }
+
+    private Character[] getCharacters(Node charactersNode) {
+        Element eCharacters = (Element) charactersNode;
+        Character[] characters = null;
+        if (eCharacters != null) {
+            NodeList characterNodes = eCharacters.getElementsByTagName("character");
+            int characterNodesLength = characterNodes.getLength();
+            characters = new Character[characterNodesLength];
+
+            for (int i = 0; i < characterNodesLength; i++) {
+                Node characterNode = characterNodes.item(i);
+
+                if (characterNode.getNodeType() == Node.ELEMENT_NODE) {
+                    Element eCharacter = (Element) characterNode;
+
+                    int id = Integer.valueOf(eCharacter.getAttribute("id"));
+                    String description = eCharacter.getElementsByTagName("description").item(0).getTextContent();
+
+                    boolean enemy = Boolean.valueOf(eCharacter.getAttribute("enemy"));
+
+                    Object[] objects = getObjects(eCharacter.getElementsByTagName("objects").item(0));
+
+                    characters[i] = new Character(id, description, enemy, objects);
+                }
+            }
+        }
+        return characters;
     }
 }

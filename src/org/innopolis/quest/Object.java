@@ -8,10 +8,12 @@ import java.io.Serializable;
 public class Object implements Serializable {
     private int id;
     private String description;
+    private boolean picked;
 
     public Object(int id, String description) {
         this.id = id;
         this.description = description;
+        this.picked = false;
     }
 
     public int getId() {
@@ -30,8 +32,17 @@ public class Object implements Serializable {
         this.description = description;
     }
 
+    public boolean isPicked() {
+        return picked;
+    }
+
+    public void pickUp() {
+        picked = true;
+    }
+
     @Override
     public String toString() {
+        if (picked) return "";
         return description;
     }
 }

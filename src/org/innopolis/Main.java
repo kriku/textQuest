@@ -1,9 +1,12 @@
 package org.innopolis;
 
 import org.innopolis.quest.*;
+import org.innopolis.quest.Character;
+import org.innopolis.quest.Object;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
 
@@ -31,7 +34,8 @@ public class Main {
 
 //          check for exist way
             if (choice >= 0 && choice < currentLocation.getExits().length) {
-                int requirement = currentLocation.getExits()[choice].getRequired();
+                int targetLocation = currentLocation.getExits()[choice].getLocation();
+                int requirement = game.getLocations()[targetLocation].getRequired();
                 if (requirement > 0) {
                     if (player.hasItem(requirement)) {
                         player.setLocation(currentLocation.getExits()[choice].getLocation());
@@ -56,6 +60,36 @@ public class Main {
                 }
             }
 
+            if (answer.length()>4 && "kill".equals(answer.substring(0, 4))) {
+                String who = answer.substring(4).trim();
+                Character findCharacter = currentLocation.getCharacterByName(who);
+                if (findCharacter != null) {
+                    player.addObjects(findCharacter.getObjects());
+                    findCharacter.killHim();
+                }
+            }
+
+            if (answer.length()>7 && "pick up".equals(answer.substring(0, 7))) {
+                String what = answer.substring(7).trim();
+                Object findObject = currentLocation.getObjectByName(what);
+                if (findObject != null) {
+                    player.addObject(findObject);
+                    currentLocation.pickUpObject(findObject);
+                }
+            }
+
+            if ("inventory".equals(answer)) {
+                Set<Integer> inventory = player.getInventory();
+                if (inventory.isEmpty()) System.out.println("nothing in inventory");
+                for (int item : inventory) {
+                    System.out.println(game.getObjectById(item));
+                }
+            }
+
+            if (answer.length()>5 && "throw".equals(answer.substring(0,5))) {
+                String what = answer.substring(5).trim();
+
+            }
         }
     }
 

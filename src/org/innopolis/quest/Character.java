@@ -7,24 +7,40 @@ import java.io.Serializable;
  */
 public class Character implements Serializable {
     private int id;
-    private String name;
+    private String description;
     private boolean enemy;
     private Object[] objects;
+    private boolean alive;
 
-    public Character(int id, String name) {
+    public Character(int id, String description) {
         this.id = id;
-        this.name = name;
+        this.description = description;
         this.enemy = false;
         this.objects = null;
+        this.alive = true;
     }
 
-    public Character(int id, String name, boolean enemy) {
-        this(id, name);
+    public Character(int id, String description, boolean enemy) {
+        this(id, description);
         this.enemy = enemy;
     }
 
-    public Character(int id, String name, boolean enemy, Object[] objects) {
-        this(id, name, enemy);
+    public Character(int id, String description, boolean enemy, Object[] objects) {
+        this(id, description, enemy);
         this.objects = objects;
+    }
+
+    public Object[] getObjects() {
+        return objects;
+    }
+
+    public void killHim() {
+        this.alive = false;
+    }
+
+    @Override
+    public String toString() {
+        if (!alive) return "corp of " + description;
+        return description;
     }
 }
