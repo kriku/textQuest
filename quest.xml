@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quest name="some name of quest">
+    <locations>
+        <location id="0">
+            <description>This is the start. Now you can choice some options.</description>
+            <exits>
+                <!-- attribute location use for movement to location with this id-->
+                <!-- attribute required use for require object with this id -->
+                <exit location="0">go north</exit>
+                <exit location="1">go south</exit>
+                <exit location="2" required="1">go east</exit>
+                <exit location="3">go west</exit>
+            </exits>
+            <objects>
+                <object id="1">knife</object>
+                <object id="2">key</object>
+                <object id="3">suit</object>
+            </objects>
+        </location>
+        <location id="1">
+            <description>Location 1</description>
+            <exits>
+                <exit location="2">go north</exit>
+            </exits>
+        </location>
+        <location id="2">
+            <description>Location 2</description>
+            <exits>
+                <exit location="0">go north</exit>
+            </exits>
+        </location>
+    </locations>
+    <characters>
+        <character id="1">
+            <objects>
+                object
+            </objects>
+        </character>
+    </characters>
+</quest>
